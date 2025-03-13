@@ -1,0 +1,1 @@
+<h1>This is a callback to the simple closure file from a closure route in CodeIgniter</h1>
