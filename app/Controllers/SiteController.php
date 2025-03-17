@@ -12,6 +12,11 @@ class SiteController extends BaseController{
         $this->db = \Config\Database::connect();
     }
 
+    public function welcomeCountryMessage()
+    {
+        echo "<h1>Welcome user to This page</h1>";
+    }
+
     public function handleAjaxRequest()
     {
         $data = $this->request->getVar();

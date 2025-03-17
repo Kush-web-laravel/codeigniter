@@ -38,3 +38,7 @@ $routes->match(['GET','POST'],'/my-file', 'SiteController::fileUpload');
 $routes->match(['GET','POST'],'/my-form-data', 'SiteController::myFormData');
 $routes->get('/ajax-method', 'SiteController::ajaxMethod');
 $routes->post('/handle-myajax', 'SiteController::handleAjaxRequest');
+$routes->get('/welcome-country', 'SiteController::welcomeCountryMessage', ['filter' => 'country_check']);
+$routes->get('/access-denied', function(){
+   echo "<h1>Access denied to this url</h1>";
+});
