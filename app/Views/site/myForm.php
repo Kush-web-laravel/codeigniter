@@ -25,7 +25,21 @@
 <?= form_button('btn_submit', 'Submit'); ?>
 
 <?= form_close() ?> -->
+<?php
 
+    if(session()->get('success')){
+        ?>
+        <p><?php echo session()->get('success'); ?></p>
+        <?php
+        
+    }
+    if(session()->get('error')){
+        ?>
+        <p><?php echo session()->get('error'); ?></p>
+        <?php
+    }
+   
+?>
 <form action="<?php echo site_url('my-form') ?>" method="post" class="my-form" id="my-form">
     <p>
         Name : <input type="text" name="txt_name" class="my-name" id="my-name" placeholder="Enter name" />

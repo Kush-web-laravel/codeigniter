@@ -12,6 +12,134 @@ class SiteController extends BaseController{
         $this->db = \Config\Database::connect();
     }
 
+    public function handleAjaxRequest()
+    {
+        $data = $this->request->getVar();
+        
+        echo json_encode(array(
+            'status' => 1,
+            'message' => "Successful request",
+            'data' => $data
+        ));
+    }
+
+
+    public function ajaxMethod()
+    {
+        return view('ajax-method');
+    }
+
+    public function myFormData()
+    {
+        if($this->request->getMethod() === 'POST'){
+            // print_r($this->request->getVar());
+            $rules = [
+                'name' => 'required|min_length[5]|max_length[10]',
+                'email' => 'required',
+                'mobile' => 'required'
+            ];
+
+            $messages=[
+                'name' => [
+                    'required' => 'Name is needed',
+                    'min_length' => 'We need atleast 5 characters'
+                ],
+                'email' => [
+                    'required' => 'Email is needed'
+                ]
+                ];
+
+            $validation = \Config\Services::validation();
+
+            if(!$this->validate($rules, $messages)){
+                return view('my-form-data', [
+                    'validation' => $this->validator
+                ]);
+            }else{
+                print_r($this->request->getVar());
+            }
+            return view('my-form-data');
+        }
+        
+    }
+
+    public function fileUpload()
+    {
+        if (strtoupper($this->request->getMethod() === 'POST')) {
+            $file = $this->request->getFile('file');
+    
+            // ✅ Check if a file was actually uploaded
+            if ($file && $file->isValid() && !$file->hasMoved()) {
+                $newName = $file->getRandomName(); // Generate a unique name
+    
+                if (!is_dir('images')) {
+                    mkdir('images', 0777, true); // Ensure directory exists
+                }
+    
+                if ($file->move('images', $newName)) {
+                    session()->setFlashdata('success', 'File has been uploaded successfully.');
+                } else {
+                    session()->setFlashdata('error', 'Error while moving the file.');
+                }
+            } else {
+                session()->setFlashdata('error', 'No file selected or invalid file.');
+            }
+        }
+    
+        return view('file-upload');
+    }
+    
+
+    public function userSession()
+    {
+        $session = \Config\Services::session();
+        // $session->set('username', 'Kush Chhatbar');
+
+        // echo $session->get('username');
+        // $session->remove('username');
+
+        // $session->set('userdata', array(
+        //     'id' => 1,
+        //     'name' => 'Jack Reacher',
+        //     'email' => 'jack@gmail.com',
+        // ));
+
+        // $session->push('userdata', array(
+        //     'post' => 'Ex-military major',
+        // ));
+
+        $userData = $session->get('userdata');
+        echo "<pre>";
+        print_r($userData);
+
+        $session->destroy();
+    }
+
+    public function getUserData()
+    {
+        $user =  new UserModel();
+        // $data = $user->findAll();
+
+        // echo"<pre>";
+        // print_r($data);
+
+        return view('user-data', [
+            'users' => $user->paginate(3),
+            'pager' => $user->pager,
+        ]);
+    }
+
+    public function listCall(){
+        print_my_message("CodeIgniter first app");
+        echo"<br><br>";
+        $string = "CodeIginter first app";
+        $length = find_my_length($string);
+        echo "Length: ". $length;
+        echo"<br><br>";
+        get_users();
+    }
+
+
     public function myForm()
     {
         if (strtolower($this->request->getMethod()) === 'post'){
@@ -25,11 +153,15 @@ class SiteController extends BaseController{
                 'phone_no' => $data['txt_phone_no']
             ];
 
+            $session = session();
+
             if($userModel->insert($form_data)){
-                echo "<h3>Form data submitted successfully.</h3>";
+                $session->setFlashdata('success', 'Form data has been saved successfully');
             }else{
-                echo "<h3>Error submitting the form</h3>";
+                $session->setFlashdata('error', 'Failed to save data');
             }
+
+            return redirect()->to(site_url('my-form'));
         }
         return view("/site/myForm");
     }
