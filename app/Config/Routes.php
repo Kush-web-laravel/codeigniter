@@ -1,6 +1,7 @@
 <?php
 
 use CodeIgniter\Router\RouteCollection;
+use App\Controllers\Api\StudentController;
 
 /**
  * @var RouteCollection $routes
@@ -41,4 +42,12 @@ $routes->post('/handle-myajax', 'SiteController::handleAjaxRequest');
 $routes->get('/welcome-country', 'SiteController::welcomeCountryMessage', ['filter' => 'country_check']);
 $routes->get('/access-denied', function(){
    echo "<h1>Access denied to this url</h1>";
+});
+
+$routes->group('api', ['namespace' => 'app\Controllers\Api'], function($routes){
+   $routes->get('students', [StudentController::class, 'index']);
+   $routes->post('create-student', [StudentController::class, 'create']);
+   $routes->get('student/(:num)', [StudentController::class, 'show']);
+   $routes->put('student/(:num)', [StudentController::class, 'update']);
+   $routes->delete('student/(:num)', [StudentController::class, 'delete']);
 });
