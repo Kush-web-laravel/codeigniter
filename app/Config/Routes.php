@@ -1,5 +1,6 @@
 <?php
 
+use App\Controllers\Api\ProductController;
 use CodeIgniter\Router\RouteCollection;
 use App\Controllers\Api\StudentController;
 
@@ -50,4 +51,12 @@ $routes->group('api', ['namespace' => 'app\Controllers\Api'], function($routes){
    $routes->get('student/(:num)', [StudentController::class, 'show']);
    $routes->put('student/(:num)', [StudentController::class, 'update']);
    $routes->delete('student/(:num)', [StudentController::class, 'delete']);
+});
+
+$routes->group('api', ['namespace' => 'app\Controllers\Api', 'filter' => 'basic_auth'], function($routes){
+   $routes->get('products', [ProductController::class, 'index']);
+   $routes->post('create-product', [ProductController::class, 'create']);
+   $routes->get('product/(:num)', [ProductController::class, 'show']);
+   $routes->put('product/(:num)', [ProductController::class, 'update']);
+   $routes->delete('product/(:num)', [ProductController::class, 'delete']);
 });
