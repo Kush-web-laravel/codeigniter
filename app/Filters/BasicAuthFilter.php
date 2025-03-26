@@ -26,7 +26,6 @@ class BasicAuthFilter implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        //
         //print_r($_SERVER);
         $authorization = $request->getServer('HTTP_AUTHORIZATION');
 
@@ -54,7 +53,7 @@ class BasicAuthFilter implements FilterInterface
 
         //Username : CI4_APIS_ADMIN
         //Password : admin#123
-        
+
         if($username != "CI4_APIS_ADMIN" || $password !== "admin#123"){
             return Services::response()->setStatusCode(400)->setJSON([
                 'status' => false,
