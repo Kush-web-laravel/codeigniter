@@ -60,3 +60,15 @@ $routes->group('api', ['namespace' => 'app\Controllers\Api', 'filter' => 'basic_
    $routes->put('product/(:num)', [ProductController::class, 'update']);
    $routes->delete('product/(:num)', [ProductController::class, 'delete']);
 });
+
+$routes->post("/auth/register", "Api\AuthorController::registerAuthor");
+$routes->post('/auth/login', "Api\AuthorController::loginAuthor");
+
+$routes->group('author', ['namespace' => 'App\Controllers\Api', "filter" => 'jwt_auth'], function($routes){
+   $routes->get('profile', 'AuthorController::authorProfile');
+   $routes->get('logout', 'AuthorController::logoutAuthor');
+
+   $routes->post('add-book', 'BookController::createBook');
+   $routes->get('list-book', 'BookController::authorBooks');
+   $routes->delete('delete-book/(:num)', 'BookController::deleteAuthorBook/$1');
+});

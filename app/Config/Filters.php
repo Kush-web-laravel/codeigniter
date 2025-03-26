@@ -14,6 +14,7 @@ use CodeIgniter\Filters\PerformanceMetrics;
 use CodeIgniter\Filters\SecureHeaders;
 use App\Filters\CountryCheckFilter;
 use App\Filters\BasicAuthFilter;
+use App\Filters\JWTAuthFilter;
 
 class Filters extends BaseFilters
 {
@@ -38,6 +39,7 @@ class Filters extends BaseFilters
         'performance'   => PerformanceMetrics::class,
         'country_check' => CountryCheckFilter::class,
         'basic_auth'    => BasicAuthFilter::class,
+        'jwt_auth'      => JWTAuthFilter::class
     ];
 
     /**
